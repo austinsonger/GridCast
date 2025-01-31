@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>GridCast</title>
+      <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+      <style>
+body {
+  display: grid; 
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  margin: 0;
+  padding: 0;
+  gap: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: black;
+}
+
+.player {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  overflow: hidden;
+}
+
+.player video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures video fills the container */
+  background-color: black;
+}
+
+.load-stream,
+.add-to-playlist {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.8);
+  color: black;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  display: none; /* Hide by default */
+}
+
+
+.player.video-playing:hover .add-to-playlist {
+  display: block; /* Show "Add to Playlist" button only when hovering over an active player */
+}
+
+.player:hover .load-stream {
+  display: block; /* Show "Load Stream" button only when hovering over a player */
+}
+
+.player.video-playing .load-stream {
+  display: none; /* Hide "Load Stream" button for active players */
+}
+
+.playlist {
+  position: absolute;
+  top: 10%;
+  right: 0;
+  width: 30%;
+  max-height: 80%; /* Ensures playlist does not overlap controls */
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  display: none;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.player:hover .playlist {
+  display: flex; /* Show playlist only on hover */
+}
+
+.playlist-item {
+  padding: 5px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.playlist-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.playlist-item.active {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+#urlModal,
+#addToPlaylistModal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background: white;
+  padding: 20px;
+  border: 2px solid black;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#urlModal label,
+#urlModal input,
+#urlModal button,
+#addToPlaylistModal label,
+#addToPlaylistModal input,
+#addToPlaylistModal button {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.remove-button {
+  margin-left: 10px;
+  padding: 3px 5px;
+  background: rgba(255, 0, 0, 0.7);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  border-radius: 3px;
+}
+
+.remove-button:hover {
+  background: rgba(255, 0, 0, 0.9);
+}
+
+
+      </style>
+   </head>
+   <body>
+      <!-- 2x2 Grid of Video Players -->
+      <div id="player1" class="player">
+         <video id="video1" controls></video>
+         <button class="load-stream" onclick="openLoadStreamModal('video1')">Load Stream</button>
+         <button class="add-to-playlist" onclick="openAddToPlaylistModal('video1')">Add to Playlist</button>
+         <div id="playlist-video1" class="playlist"></div>
+      </div>
+      <div id="player2" class="player">
+         <video id="video2" controls></video>
+         <button class="load-stream" onclick="openLoadStreamModal('video2')">Load Stream</button>
+         <button class="add-to-playlist" onclick="openAddToPlaylistModal('video2')">Add to Playlist</button>
+         <div id="playlist-video2" class="playlist"></div>
+      </div>
+      <div id="player3" class="player">
+         <video id="video3" controls></video>
+         <button class="load-stream" onclick="openLoadStreamModal('video3')">Load Stream</button>
+         <button class="add-to-playlist" onclick="openAddToPlaylistModal('video3')">Add to Playlist</button>
+         <div id="playlist-video3" class="playlist"></div>
+      </div>
+      <div id="player4" class="player">
+         <video id="video4" controls></video>
+         <button class="load-stream" onclick="openLoadStreamModal('video4')">Load Stream</button>
+         <button class="add-to-playlist" onclick="openAddToPlaylistModal('video4')">Add to Playlist</button>
+         <div id="playlist-video4" class="playlist"></div>
+      </div>
+      <!-- Modal for Stream URL Input -->
+      <!-- Modal for Stream URL Input -->
+      <div id="urlModal">
+         <label for="streamUrl">Enter M3U8 Stream URL:</label>
+         <input type="text" id="streamUrl" placeholder="https://example.com/stream.m3u8">
+         <label for="mp4File">Or Upload MP4 File:</label>
+         <input type="file" id="videoFile" accept="video/mp4,video/x-matroska">
+         <button onclick="loadStreamOrFile()">Load</button>
+         <button onclick="closeModal()">Cancel</button>
+      </div>
+      <!-- Modal for Adding to Playlist -->
+<!-- Modal for Adding to Playlist -->
+    <div id="addToPlaylistModal">
+        <label for="addPlaylistUrl">Add URL to Playlist:</label>
+        <input type="text" id="addPlaylistUrl" placeholder="https://example.com/stream.m3u8">
+        <label for="addMp4File">Or Upload MP4 File:</label>
+        <input type="file" id="addVideoFile" accept="video/mp4,video/x-matroska">
+        <button onclick="addToPlaylist()">Add</button>
+        <button onclick="closeModal()">Cancel</button>
+    </div>
+
+      <script>
+         const { storageData, saveStorage } = require('./storage');
+         let currentVideoId = null;
+         const playlists = { ...storageData }; // Load playlists dynamically from storageData
+
+         let currentIndices = {
+             video1: 0,
+             video2: 0,
+             video3: 0,
+             video4: 0
+         };
+         
+         function loadSavedData() {
+    console.log("Loading saved playlists...");
+
+    Object.keys(storageData).forEach(videoId => {
+        if (!storageData[videoId]) {
+            storageData[videoId] = []; // Ensure each playlist exists in storage
+        }
+        playlists[videoId] = [...storageData[videoId]]; // Restore from storage
+
+        console.log(`Restored playlist for ${videoId}:`, playlists[videoId]);
+
+        if (playlists[videoId].length > 0) {
+            loadStream(videoId, playlists[videoId][0]); // Load the first saved video
+        }
+
+        // Call renderPlaylist to ensure button visibility is updated
+        renderPlaylist(videoId);
+    });
+
+    console.log("All saved playlists loaded successfully.");
+}
+
+
+         
+function savePlaylists() {
+    console.log("Saving playlists...");
+
+    Object.keys(playlists).forEach(videoId => {
+        if (!playlists[videoId]) {
+            playlists[videoId] = []; // Ensure each playlist exists
+        }
+        storageData[videoId] = [...playlists[videoId]]; // Copy current state to storage
+    });
+
+    saveStorage(); // Persist the data
+    console.log("Playlists saved successfully:", storageData);
+}
+
+
+         
+// Define this globally
+function openLoadStreamModal(videoId) {
+    console.log(`Opening Load Stream modal for ${videoId}`);
+
+    currentVideoId = videoId;
+    const modal = document.getElementById("urlModal");
+
+    if (modal) {
+        modal.style.display = "block";
+        document.getElementById("streamUrl").value = "";
+        document.getElementById("videoFile").value = ""; // Clear the file input
+        console.log("Load Stream modal opened successfully.");
+    } else {
+        console.error("Error: Load Stream modal not found.");
+    }
+}
+
+
+
+         
+         
+function loadStream(videoId, url) {
+    const video = document.getElementById(videoId);
+    const player = video.parentElement;
+
+    console.log(`Loading stream for videoId: ${videoId}, URL: ${url}`);
+
+    // Check if the URL is an M3U8 stream
+    if (Hls.isSupported() && url.endsWith('.m3u8')) {
+        // Load M3U8 using HLS.js
+        console.log("Loading HLS stream...");
+        const hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            video.play();
+        });
+
+        hls.on(Hls.Events.ERROR, (event, data) => {
+            console.error("HLS Error:", data);
+
+            // Only alert the user for fatal errors
+            if (data.fatal) {
+                switch (data.type) {
+                    case Hls.ErrorTypes.NETWORK_ERROR:
+                        alert("A network error occurred while loading the HLS stream. Please check the URL and your connection.");
+                        break;
+                    case Hls.ErrorTypes.MEDIA_ERROR:
+                        alert("Failed to load the HLS stream due to a media error. Please check the URL.");
+                        break;
+                    default:
+                        alert("An unknown error occurred while loading the HLS stream.");
+                }
+            } else {
+                console.warn("Non-fatal HLS error. Continuing playback...");
+            }
+        });
+    } else if (url.endsWith('.mp4') || url.endsWith('.mkv')) {
+        // Load MP4 or MKV directly in the video element
+        console.log("Loading direct file:", url);
+        video.src = url;
+        video.load();
+        video.play();
+    } else if (video.canPlayType('application/vnd.apple.mpegurl') && url.endsWith('.m3u8')) {
+        console.log("Native HLS support detected. Loading stream...");
+        video.src = url;
+        video.addEventListener("loadedmetadata", () => {
+            console.log("Stream metadata loaded. Playing...");
+            video.play();
+        });
+        video.addEventListener("error", () => {
+            console.error("Error loading native HLS stream.");
+            alert("Failed to load the HLS stream. Please check the URL.");
+        });
+    } else {
+        console.error("Unsupported format:", url);
+        alert("Unsupported format. Please use an MP4, MKV, or M3U8 stream.");
+    }
+
+    // Mark the video player as active
+    player.classList.add("video-playing");
+    console.log(`Stream for ${videoId} loaded successfully.`);
+}
+
+         
+         function loadStreamUrl() {
+             const url = document.getElementById("streamUrl").value;
+             if (url) {
+                 playlists[currentVideoId].unshift(url);
+                 loadStream(currentVideoId, url);
+                 renderPlaylist(currentVideoId);
+                 savePlaylists();
+             }
+             closeModal();
+         }
+         
+         function loadStreamOrFile() {
+    const url = document.getElementById("streamUrl").value;
+    const fileInput = document.getElementById("videoFile");
+
+    console.log("Triggered loadStreamOrFile...");
+    console.log("URL entered:", url);
+    console.log("File input:", fileInput.files);
+
+    if (url) {
+        console.log("Loading stream URL:", url);
+
+        storageData[currentVideoId] = storageData[currentVideoId] || [];
+        storageData[currentVideoId].unshift(url);
+        saveStorage();
+        console.log("Updated storageData after adding URL:", storageData);
+
+        loadStream(currentVideoId, url);
+    } else if (fileInput.files.length > 0) {
+        const file = URL.createObjectURL(fileInput.files[0]);
+        console.log("Loading MP4 file:", file);
+
+        storageData[currentVideoId] = storageData[currentVideoId] || [];
+        storageData[currentVideoId].unshift(file);
+        saveStorage();
+        console.log("Updated storageData after adding MP4 file:", storageData);
+
+        loadStream(currentVideoId, file);
+    } else {
+        alert("Please provide a URL or upload an MP4 file.");
+        return;
+    }
+
+    console.log("Rendering playlist for:", currentVideoId);
+try {
+    renderPlaylist(currentVideoId);
+    console.log("Playlist rendered successfully.");
+    closeModal();
+    console.log("Modal closed successfully.");
+} catch (error) {
+    console.error("Error during loadStreamOrFile execution:", error);
+}
+}
+
+
+
+
+         
+         
+         function openAddToPlaylistModal(videoId) {
+             currentVideoId = videoId;
+             document.getElementById("addToPlaylistModal").style.display = "block";
+             document.getElementById("addPlaylistUrl").value = "";
+         }
+         
+         function addToPlaylist() {
+    const url = document.getElementById("addPlaylistUrl").value;
+    const fileInput = document.getElementById("addMp4File");
+
+    if (url) {
+        storageData[currentVideoId] = storageData[currentVideoId] || [];
+        storageData[currentVideoId].push(url); // Add URL to storage
+        playlists[currentVideoId] = storageData[currentVideoId]; // Sync playlists
+    } else if (fileInput.files.length > 0) {
+        const file = URL.createObjectURL(fileInput.files[0]);
+        const fileType = fileInput.files[0].type;
+
+        if (fileType === "video/mp4" || fileType === "video/x-matroska") {
+            storageData[currentVideoId] = storageData[currentVideoId] || [];
+            storageData[currentVideoId].push(file); // Add file to storage
+            playlists[currentVideoId] = storageData[currentVideoId]; // Sync playlists
+            saveStorage();
+        } else {
+            alert("Unsupported file type. Please upload an MP4 or MKV file.");
+            return;
+        }
+    } else {
+        alert("Please provide a URL or upload an MP4 file.");
+        return;
+    }
+
+    saveStorage(); // Save changes to storage
+    renderPlaylist(currentVideoId); // Update button visibility and playlist UI
+    closeModal(); // Close modal
+}
+
+
+         
+function renderPlaylist(videoId) {
+    const playlistElement = document.getElementById(`playlist-${videoId}`);
+    const addToPlaylistButton = document.querySelector(`#${videoId}`).parentElement.querySelector('.add-to-playlist');
+
+    // Clear the existing playlist
+    playlistElement.innerHTML = "";
+
+    // Iterate through the playlist and create items
+    playlists[videoId].forEach((url, index) => {
+        const item = document.createElement("div");
+        item.className = "playlist-item";
+        item.innerHTML = `
+            <span>${url}</span>
+            <button class="remove-button" onclick="removeFromPlaylist('${videoId}', ${index})">Remove</button>
+        `;
+        item.querySelector("span").onclick = () => loadStream(videoId, url);
+        playlistElement.appendChild(item);
+    });
+
+    // Update "Add to Playlist" button visibility based on playlist length
+    if (playlists[videoId].length >= 2) {
+        addToPlaylistButton.style.display = "block"; // Show button for 2 or more items
+    } else {
+        addToPlaylistButton.style.display = "none"; // Hide button otherwise
+    }
+}
+
+
+
+function removeFromPlaylist(videoId, index) {
+    if (playlists[videoId] && playlists[videoId].length > index) {
+        playlists[videoId].splice(index, 1); // Remove item from playlist
+        storageData[videoId] = [...playlists[videoId]]; // Sync with storage
+        saveStorage(); // Save changes
+        renderPlaylist(videoId); // Update button visibility and playlist UI
+    } else {
+        console.warn(`Invalid index ${index} for ${videoId}`);
+    }
+}
+
+
+
+
+         
+function closeModal() {
+    console.log("Closing modals...");
+    const urlModal = document.getElementById("urlModal");
+    const addToPlaylistModal = document.getElementById("addToPlaylistModal");
+
+    if (urlModal) {
+        console.log("Hiding URL Modal...");
+        urlModal.style.display = "none";
+    } else {
+        console.warn("URL Modal not found.");
+    }
+
+    if (addToPlaylistModal) {
+        console.log("Hiding Add to Playlist Modal...");
+        addToPlaylistModal.style.display = "none";
+    } else {
+        console.warn("Add to Playlist Modal not found.");
+    }
+}
+
+         
+         window.onload = loadSavedData;
+      </script>
+   </body>
+</html>
