@@ -13,10 +13,6 @@ jobs:
   build:
     runs-on: macos-latest
 
-    strategy:
-      matrix:
-        arch: [arm64, x64]
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -30,11 +26,11 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Build DMG (macOS ${{ matrix.arch }})
-        run: npm run build:macos -- --arch=${{ matrix.arch }}
+      - name: Build DMG for macOS (Both x64 and arm64)
+        run: npm run build:macos
 
-      - name: Upload DMG Artifact
+      - name: Upload DMG Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: GridCast-macOS-${{ matrix.arch }}
-          path: dist/GridCast-${{ matrix.arch }}.dmg
+          name: GridCast-macOS
+          path: dist/*.dmg
