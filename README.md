@@ -2,6 +2,8 @@
 
 GridCast is a **macOS Electron application** that allows users to play multiple M3U8 streams and MP4 files in a **dynamic 2x2 grid layout**. Built with **Electron.js**, **MPV**, and **HLS.js**, it provides a seamless way to load, manage, and persist playlists for multiple video streams.
 
+![](docs/GridCast_Blank.png)
+
 
 ---
 
