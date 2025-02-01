@@ -37,4 +37,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: GridCast-macOS-${{ matrix.arch }}
-          path: dist/GridCast-${{ matrix.arch }}.dmg
+          path: dist/GridCast-darwin-${{ matrix.arch }}/GridCast.dmg
