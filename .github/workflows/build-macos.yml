@@ -30,11 +30,11 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Build App (macOS ${{ matrix.arch }})
-        run: npm run build:packager -- --arch=${{ matrix.arch }}
+      - name: Build DMG (macOS ${{ matrix.arch }})
+        run: npm run build:macos -- --arch=${{ matrix.arch }}
 
       - name: Upload DMG Artifact
         uses: actions/upload-artifact@v4
         with:
           name: GridCast-macOS-${{ matrix.arch }}
-          path: dist/GridCast-darwin-${{ matrix.arch }}/GridCast.dmg
+          path: dist/GridCast-${{ matrix.arch }}.dmg
