@@ -5,7 +5,7 @@
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
-    "build:packager": "electron-packager . GridCast --platform=darwin --arch=$npm_config_arch --out=dist --overwrite"
+    "build:packager": "electron-packager . GridCast --platform=darwin --out=dist --overwrite"
   },
   "devDependencies": {
     "electron": "^34.0.2",
