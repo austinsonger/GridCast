@@ -4,7 +4,8 @@
   "description": "GridCast - A multi-stream player using Electron and MPV",
   "main": "src/main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build:packager": "electron-packager . GridCast --platform=darwin --arch=$npm_config_arch --out=dist --overwrite"
   },
   "devDependencies": {
     "electron": "^34.0.2",
