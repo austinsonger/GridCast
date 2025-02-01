@@ -7,7 +7,8 @@
     "start": "electron .",
     "postinstall": "node -e \"if (process.platform === 'darwin') { require('child_process').execSync('npm install dmg-license'); }\"",
     "build:packager": "electron-packager . GridCast --platform=darwin --out=dist --overwrite --arch=all",
-    "build:macos": "electron-builder --mac"
+    "build:macos-dev": "electron-packager . GridCast --platform=darwin --out=dist --overwrite --arch=all",
+    "build:macos-prod": "electron-builder --mac"
   },
   "devDependencies": {
     "electron": "^34.0.2",
@@ -34,7 +35,7 @@
       "format": "UDZO"
     }
   },
-  "keywords": [],
+  "keywords": ["multi-stream-player","grid-layout-video","playlist-management"],
   "author": "Austin Songer",
   "license": "ISC"
 }

@@ -116,6 +116,9 @@ dist
 # Serverless directories
 .serverless/
 
+# Zip File
+# dist.zip 
+
 # FuseBox cache
 .fusebox/
 

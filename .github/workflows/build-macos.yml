@@ -32,6 +32,12 @@ jobs:
       - name: Set GRIDCAST_TOKEN for Electron Builder
         run: echo "GH_TOKEN=${{ secrets.GRIDCAST_TOKEN }}" >> $GITHUB_ENV
 
+      - name: Build DMG for macOS (Both x64 and arm64)
+        run: npm run build:macos-prod
+
+      - name: List dist directory contents
+        run: ls -la dist
+
       - name: Get the current commit hash
         id: get_commit
         run: echo "COMMIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
@@ -46,12 +52,6 @@ jobs:
           release_name: GridCast ${{ env.COMMIT_HASH }}
           draft: false
           prerelease: false
-
-      - name: Build DMG for macOS (Both x64 and arm64)
-        run: npm run build:macos
-
-      - name: List dist directory contents
-        run: ls -la dist
 
       - name: Upload Release Asset (x64)
         uses: actions/upload-release-asset@v1
