@@ -112,7 +112,7 @@ npm run build:macos
 
 ## Author 
 
-💻 Created by Austin Songer
-📧 Contact: austin@songer.me
+- 💻 Created by Austin Songer
+- 📧 Contact: austin@songer.me
 
 
