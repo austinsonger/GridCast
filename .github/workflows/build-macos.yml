@@ -32,8 +32,27 @@ jobs:
       - name: Build DMG for macOS (Both x64 and arm64)
         run: npm run build:macos
 
-      - name: Upload DMG Artifacts
-        uses: actions/upload-artifact@v4
+      - name: Get the current commit hash
+        id: get_commit
+        run: echo "COMMIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: GridCast-macOS
-          path: dist/*.dmg
+          tag_name: ${{ env.COMMIT_HASH }}
+          release_name: GridCast ${{ env.COMMIT_HASH }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/GridCast-darwin-x64.dmg
+          asset_name: GridCast-darwin-x64.dmg
+          asset_content_type: application/octet-stream
