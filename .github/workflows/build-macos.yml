@@ -32,12 +32,6 @@ jobs:
       - name: Set GRIDCAST_TOKEN for Electron Builder
         run: echo "GH_TOKEN=${{ secrets.GRIDCAST_TOKEN }}" >> $GITHUB_ENV
 
-      - name: Build DMG for macOS (Both x64 and arm64)
-        run: npm run build:macos
-
-      - name: List dist directory contents
-        run: ls -la dist
-
       - name: Get the current commit hash
         id: get_commit
         run: echo "COMMIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
@@ -53,12 +47,28 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Upload Release Asset
+      - name: Build DMG for macOS (Both x64 and arm64)
+        run: npm run build:macos
+
+      - name: List dist directory contents
+        run: ls -la dist
+
+      - name: Upload Release Asset (x64)
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/GridCast-darwin-x64.dmg
-          asset_name: GridCast-darwin-x64.dmg
+          asset_path: dist/GridCast-1.0.0.dmg
+          asset_name: GridCast-1.0.0.dmg
+          asset_content_type: application/octet-stream
+
+      - name: Upload Release Asset (arm64)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/GridCast-1.0.0-arm64.dmg
+          asset_name: GridCast-1.0.0-arm64.dmg
           asset_content_type: application/octet-stream
