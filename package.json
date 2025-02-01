@@ -6,8 +6,33 @@
   "scripts": {
     "start": "electron ."
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "electron": "^34.0.2",
+    "electron-builder": "^25.1.8",
+    "electron-packager": "^17.1.2"
+  },
+  "build": {
+    "appId": "com.ol1vebranch.gridcast",
+    "productName": "GridCast",
+    "mac": {
+      "category": "public.app-category.video",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": "arm64"
+        },
+        {
+          "target": "dmg",
+          "arch": "x64"
+        },
+        "zip"
+      ]
+    },
+    "dmg": {
+      "format": "UDZO"
+    }
+  },
   "keywords": [],
-  "author": "",
+  "author": "Austin Songer",
   "license": "ISC"
 }
