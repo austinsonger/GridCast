@@ -1,3 +1,4 @@
+/* Main layout */
 body {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -32,12 +33,14 @@ body {
 /* Button visibility logic */
 .player .load-stream,
 .player .repeat-toggle,
+.player .remove-video,
 .player .add-to-playlist {
     visibility: hidden; /* Initially hidden */
 }
 
 .player:hover .load-stream,
 .player:hover .repeat-toggle,
+.player:hover .remove-video,
 .player.video-playing:hover .add-to-playlist {
     visibility: visible; /* Show on hover */
 }
@@ -47,19 +50,42 @@ body {
 }
 
 /* Button positioning */
-.load-stream {
-    bottom: 60px;
+.button-container {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 10;
+    bottom: 30px; /* Base position */
+    display: flex;
+    flex-direction: row; /* Align buttons side by side */
+    gap: 10px; /* Ensure equal spacing between buttons */
+    justify-content: center; /* Center-align buttons */
+    align-items: center;
+}
+
+.button-container .load-stream,
+.button-container .repeat-toggle,
+.button-container .remove-video {
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.load-stream,
+.remove-video,
+.repeat-toggle {
     padding: 8px 16px;
     background: rgba(255, 255, 255, 0.8);
     color: black;
     border: none;
     font-size: 14px;
     cursor: pointer;
+    z-index: 10;
 }
+
 
 .add-to-playlist {
     bottom: 30px;
@@ -75,19 +101,7 @@ body {
     cursor: pointer;
 }
 
-.repeat-toggle {
-    bottom: 90px;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-    padding: 8px 16px;
-    background: rgba(255, 255, 255, 0.8);
-    color: black;
-    border: none;
-    font-size: 14px;
-    cursor: pointer;
-}
+
 
 /* Playlist styling */
 .playlist {
@@ -150,27 +164,4 @@ body {
 
 .remove-button:hover {
     background: rgba(255, 0, 0, 0.9);
-}
-/* Button container for aligning Load Stream and Repeat side by side */
-/* Button container for aligning Load Stream and Repeat side by side */
-.button-container {
-    position: absolute;
-    bottom: 60px; /* Adjust as needed */
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 10px; /* Space between buttons */
-    align-items: center; /* Ensure buttons align vertically */
-}
-
-/* Ensure both buttons are aligned properly */
-.button-container .load-stream,
-.button-container .repeat-toggle {
-    padding: 8px 16px;
-    background: rgba(255, 255, 255, 0.8);
-    color: black;
-    border: none;
-    font-size: 14px;
-    cursor: pointer;
-    position: static; /* Remove absolute positioning */
 }

@@ -158,6 +158,28 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
+    window.removeVideo = function (videoId) {
+        console.log(`removeVideo triggered for ${videoId}`);
+        const videoElement = document.getElementById(videoId);
+        if (videoElement) {
+            videoElement.src = "";
+            videoElement.load();
+        }
+    
+        const playlistContainer = document.getElementById(`playlist-${videoId}`);
+        if (playlistContainer) {
+            playlistContainer.innerHTML = ""; // Clear the playlist
+        }
+    
+        const repeatButton = document.querySelector(`#player${videoId.slice(-1)} .repeat-toggle`);
+        if (repeatButton) {
+            repeatButton.textContent = "Repeat: Off";
+        }
+    
+        localStorage.removeItem(`repeat-${videoId}`);
+    };
+
+
     // Toggle repeat mode for a video
     window.toggleRepeatMode = function (videoId) {
         console.log(`toggleRepeatMode triggered for ${videoId}`);
