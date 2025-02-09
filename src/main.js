@@ -1,12 +1,13 @@
 const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const path = require("path");
-const MPV = require("node-mpv");
+// Remove these lines:
+// const MPV = require("node-mpv");
+// const mpvPlayer = new MPV();
 const ffmpeg = require("fluent-ffmpeg");
 const ffmpegPath = require("ffmpeg-static");
 const { setRepeatMode, getRepeatMode } = require('./storage');
 
 let mainWindow;
-const mpvPlayer = new MPV();
 
 // Set FFmpeg path
 ffmpeg.setFfmpegPath(ffmpegPath);
