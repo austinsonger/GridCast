@@ -1,4 +1,4 @@
-name: Build macOS App
+name: Build Electron App
 
 on:
   push:
@@ -13,9 +13,8 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  build-macos:
     runs-on: macos-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -34,7 +33,6 @@ jobs:
           echo "GH_TOKEN=${{ secrets.GRIDCAST_TOKEN }}" >> $GITHUB_ENV
           echo "GRIDCAST_TOKEN=${{ secrets.GRIDCAST_TOKEN }}" >> $GITHUB_ENV
 
-          
       - name: Get the current commit hash
         id: get_commit
         run: echo "COMMIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
@@ -52,9 +50,6 @@ jobs:
 
       - name: Build DMG for macOS (Both x64 and arm64)
         run: npm run build:macos
-
-      - name: List dist directory contents
-        run: ls -la dist
 
       - name: Upload Release Asset (x64)
         uses: actions/upload-release-asset@v1
@@ -74,4 +69,42 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: dist/GridCast-1.0.0-arm64.dmg
           asset_name: GridCast-1.0.0-arm64.dmg
+          asset_content_type: application/octet-stream
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Windows Installer
+        run: npm run build:windows
+
+      - name: Upload Windows Installer (x64)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/GridCast-1.0.0-x64.nsis.exe
+          asset_name: GridCast-1.0.0-x64.nsis.exe
+          asset_content_type: application/octet-stream
+
+      - name: Upload Windows Installer (arm64)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/GridCast-1.0.0-arm64.nsis.exe
+          asset_name: GridCast-1.0.0-arm64.nsis.exe
           asset_content_type: application/octet-stream
