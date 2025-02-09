@@ -39,8 +39,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ env.VERSION }}-${{ env.COMMIT_HASH }}
-          release_name: GridCast v${{ env.VERSION }} (${{ env.COMMIT_HASH }})
+          tag_name: v${{ env.VERSION }}.${{ env.COMMIT_HASH }}
+          release_name: GridCast v${{ env.VERSION }}.(${{ env.COMMIT_HASH }})
           draft: false
           prerelease: false
 
