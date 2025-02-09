@@ -1,4 +1,4 @@
-name: Build Electron App
+name: Build GRIDCAST App
 
 on:
   push:
@@ -41,7 +41,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ env.COMMIT_HASH }}
           release_name: GridCast ${{ env.COMMIT_HASH }}
@@ -50,7 +50,7 @@ jobs:
 
       - name: Build DMG for macOS (Both x64 and arm64)
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: npm run build:macos
 
       - name: Upload Release Asset (x64)
