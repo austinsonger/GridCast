@@ -42,9 +42,30 @@ document.addEventListener("DOMContentLoaded", () => {
             const fileInput = document.getElementById("videoFile");
             const video = document.getElementById(window.targetVideoId);
 
+            console.log("URL:", url); // Debugging
+            console.log("Video Element:", video); // Debugging
+
             if (url) {
-                video.src = url;
-                video.load();
+                if (Hls.isSupported()) {
+                    console.log("HLS is supported"); // Debugging
+                    const hls = new Hls();
+                    hls.loadSource(url);
+                    hls.attachMedia(video);
+                    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                        video.play();
+                    });
+                    hls.on(Hls.Events.ERROR, (event, data) => {
+                        console.error("HLS error:", data);
+                    });
+                } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                    console.log("HLS natively supported"); // Debugging
+                    video.src = url;
+                    video.addEventListener('loadedmetadata', () => {
+                        video.play();
+                    });
+                } else {
+                    console.error("HLS is not supported on this browser.");
+                }
             } else if (fileInput.files.length > 0) {
                 const file = fileInput.files[0];
                 const objectUrl = URL.createObjectURL(file);
