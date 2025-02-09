@@ -49,6 +49,8 @@ jobs:
           prerelease: false
 
       - name: Build DMG for macOS (Both x64 and arm64)
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: npm run build:macos
 
       - name: Upload Release Asset (x64)
@@ -87,6 +89,8 @@ jobs:
         run: npm install
 
       - name: Build Windows Installer
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: npm run build:windows
 
       - name: Upload Windows Installer (x64)
