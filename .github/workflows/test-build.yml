@@ -35,9 +35,10 @@ jobs:
         id: bump_version
         run: |
           npm version patch
+          git add package.json
           NEW_VERSION=$(node -p "require('./package.json').version")
-          echo "::set-output name=new_version::$NEW_VERSION"
-          git commit -am "Bump version to $NEW_VERSION"
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          git commit -m "Bump version to $NEW_VERSION"
           git push
 
   create-release:
