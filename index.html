@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GridCast</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <link rel="stylesheet" href="css/styles.css"> 
+</head>
+<body>
+
+    <!-- Video Players (2x2 Grid) -->
+    <div id="player1" class="player">
+        <video id="video1" controls preload="auto"></video>
+        <div class="button-container">
+            <button class="load-stream" onclick="window.openLoadStreamModal('video1')">Load Stream</button>
+            <button class="repeat-toggle" id="repeat-video1" onclick="window.toggleRepeatMode('video1')">Repeat: Off</button>
+            <button class="remove-video" onclick="window.removeVideo('video1')">Remove Video</button>
+        </div>
+        <button class="add-to-playlist" data-video-id="video1" data-action="addToPlaylist">Add to Playlist</button>
+        <div id="playlist-video1" class="playlist"></div>
+    </div>
+    
+    <div id="player2" class="player">
+        <video id="video2" controls preload="auto"></video>
+        <div class="button-container">
+            <button class="load-stream" onclick="window.openLoadStreamModal('video2')">Load Stream</button>
+            <button class="repeat-toggle" id="repeat-video2" onclick="window.toggleRepeatMode('video2')">Repeat: Off</button>
+            <button class="remove-video" onclick="window.removeVideo('video2')">Remove Video</button>
+        </div>
+        <button class="add-to-playlist" data-video-id="video2" data-action="addToPlaylist">Add to Playlist</button>
+        <div id="playlist-video2" class="playlist"></div>
+    </div>
+    
+    <div id="player3" class="player">
+        <video id="video3" controls preload="auto"></video>
+        <div class="button-container">
+            <button class="load-stream" onclick="window.openLoadStreamModal('video3')">Load Stream</button>
+            <button class="repeat-toggle" id="repeat-video3" onclick="window.toggleRepeatMode('video3')">Repeat: Off</button>
+            <button class="remove-video" onclick="window.removeVideo('video3')">Remove Video</button>
+        </div>
+        <button class="add-to-playlist" data-video-id="video3" data-action="addToPlaylist">Add to Playlist</button>
+        <div id="playlist-video3" class="playlist"></div>
+    </div>
+    
+    <div id="player4" class="player">
+        <video id="video4" controls preload="auto"></video>
+        <div class="button-container">
+            <button class="load-stream" onclick="window.openLoadStreamModal('video4')">Load Stream</button>
+            <button class="repeat-toggle" id="repeat-video4" onclick="window.toggleRepeatMode('video4')">Repeat: Off</button>
+            <button class="remove-video" onclick="window.removeVideo('video4')">Remove Video</button>
+        </div>
+        <button class="add-to-playlist" data-video-id="video4" data-action="addToPlaylist">Add to Playlist</button>
+        <div id="playlist-video4" class="playlist"></div>
+    </div>
+
+<!-- Add URL/File Modal -->
+<div id="urlModal" class="modal">
+    <div class="modal-content">
+        <h2>Load Stream or File</h2>
+        <input type="text" id="streamUrl" placeholder="Enter stream URL">
+        <input type="file" id="videoFile" accept="video/*">
+        <button onclick="window.api.loadStreamOrFile()">Load</button>
+        <button onclick="window.api.closeModal()">Cancel</button>
+    </div>
+</div>
+
+<!-- Add to Playlist Modal -->
+<div id="addToPlaylistModal" class="modal">
+    <div class="modal-content">
+        <h2>Add to Playlist</h2>
+        <input type="text" id="addPlaylistUrl" placeholder="Enter stream URL">
+        <input type="file" id="addVideoFile" accept="video/*">
+        <button onclick="window.api.addToPlaylist()">Add</button>
+        <button onclick="window.api.closeModal()">Cancel</button>
+    </div>
+</div>
+
+    <script src="render.js"></script>
+
+</body>
+</html>
