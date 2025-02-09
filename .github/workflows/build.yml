@@ -125,7 +125,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: dist/GridCast-*.dmg
+          asset_path: dist/GridCast-1.0.0.dmg
           asset_name: GridCast-${{ env.VERSION }}.dmg
           asset_content_type: application/octet-stream
 
@@ -135,6 +135,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: dist/GridCast-*.exe
+          asset_path: dist/GridCast Setup 1.0.0.exe
           asset_name: GridCast-${{ env.VERSION }}.exe
           asset_content_type: application/octet-stream
