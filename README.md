@@ -32,28 +32,7 @@ GridCast is a **macOS Electron application** that allows users to play multiple 
 ✅ **Minimal UI Design** – Clean and auto-hiding interface  
 
 
-## File Structure
 
-```bash
-/gridcast
-│── /src
-│   │── main.js               # Electron main process
-│   │── preload.js            # Secure preload script for UI functions
-│   │── playerManager.js      # Handles video playback
-│   │── playlistManager.js    # Manages playlists
-│   │── storageManager.js     # Handles persistent storage
-│   │── uiManager.js          # UI interactions and modals
-│   │── eventHandlers.js      # User input events
-│── /assets
-│   │── style.css             # UI styles
-│── /views
-│   │── index.html            # App UI
-│── package.json              # Project metadata
-│── package-lock.json         # Dependencies
-│── .github/workflows/        # GitHub Actions CI/CD workflow
-│── dist/                     # Built `.dmg` files
-│── localStorage.json         # Persistent playlists
-```
 
 ## **Installation**
 
