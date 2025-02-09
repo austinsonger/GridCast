@@ -62,7 +62,7 @@ jobs:
         run: npm run build:macos
 
       - name: Upload macOS Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@main
         with:
           name: macos-build
           path: dist/*.dmg
@@ -89,7 +89,7 @@ jobs:
         run: npm run build:windows
 
       - name: Upload Windows Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@main
         with:
           name: windows-build
           path: dist/*.exe
