@@ -30,7 +30,7 @@ jobs:
 
       - name: Set GRIDCAST_TOKEN for Electron Builder
         run: |
-          echo "GH_TOKEN=${{ secrets.GRIDCAST_TOKEN }}" >> $GITHUB_ENV
+          echo "GH_TOKEN=${{ secrets.GH_TOKEN }}" >> $GITHUB_ENV
           echo "GRIDCAST_TOKEN=${{ secrets.GRIDCAST_TOKEN }}" >> $GITHUB_ENV
 
       - name: Get the current commit hash
@@ -41,7 +41,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           tag_name: ${{ env.COMMIT_HASH }}
           release_name: GridCast ${{ env.COMMIT_HASH }}
@@ -66,7 +66,7 @@ jobs:
       - name: Upload Release Asset (arm64)
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: dist/GridCast-1.0.0-arm64.dmg
@@ -96,7 +96,7 @@ jobs:
       - name: Upload Windows Installer (x64)
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: dist/GridCast-1.0.0-x64.nsis.exe
@@ -106,7 +106,7 @@ jobs:
       - name: Upload Windows Installer (arm64)
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: dist/GridCast-1.0.0-arm64.nsis.exe
