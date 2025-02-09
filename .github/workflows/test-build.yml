@@ -13,37 +13,7 @@ permissions:
   contents: write
 
 jobs:
-  version-bump:
-    runs-on: ubuntu-latest
-    outputs:
-      new_version: ${{ steps.bump_version.outputs.new_version }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Configure Git user
-        run: |
-            git config --global user.email "actions@github.com"
-            git config --global user.name "GitHub Actions"
-
-      - name: Bump version and update package.json
-        id: bump_version
-        run: |
-              npm version patch
-              git add package.json
-              NEW_VERSION=$(node -p "require('./package.json').version")
-              echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
-              git commit -m "Bump version to $NEW_VERSION"
-              git push
-        shell: bash
-
   create-release:
-    needs: version-bump
     runs-on: ubuntu-latest
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
@@ -98,8 +68,8 @@ jobs:
           path: dist/*.dmg
 
   build-windows:
-    needs: create-release
     runs-on: windows-latest
+    needs: create-release
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
