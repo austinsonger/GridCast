@@ -1,8 +1,8 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 // Remove ES6 imports
-const modalFunctions = require('./src/modal.js');
-const videoControlFunctions = require('./src/videoControls.js');
+const modalFunctions = require('./modal.js');
+const videoControlFunctions = require('./videoControls.js');
 
 contextBridge.exposeInMainWorld('api', {
     // IPC functions

@@ -3,7 +3,7 @@ const path = require("path");
 const MPV = require("node-mpv");
 const ffmpeg = require("fluent-ffmpeg");
 const ffmpegPath = require("ffmpeg-static");
-const { setRepeatMode, getRepeatMode } = require('./src/storage');
+const { setRepeatMode, getRepeatMode } = require('./storage');
 
 let mainWindow;
 const mpvPlayer = new MPV();
