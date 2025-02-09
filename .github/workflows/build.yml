@@ -116,6 +116,9 @@ jobs:
           name: windows-build
           path: dist
 
+      - name: List macOS Directory Contents
+        run: ls -l dist
+
       - name: Upload macOS Assets
         uses: actions/upload-release-asset@v1
         env:
