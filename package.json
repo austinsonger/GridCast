@@ -5,7 +5,7 @@
   "scripts": {
     "start": "electron .",
     "build:packager": "NODE_ENV=production electron-packager . GridCast --platform=darwin,win32 --arch=arm64,x64 --out=dist --overwrite",
-    "build:builder": "SET NODE_ENV=production&& electron-builder",
+    "build:builder": "cross-env NODE_ENV=production electron-builder",
     "build:macos": "npm run build:builder",
     "build:windows": "npm run build:builder"
   },
