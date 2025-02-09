@@ -17,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
+      version: ${{ steps.get_version.outputs.VERSION }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -24,6 +25,7 @@ jobs:
       - name: Get Current Version from package.json
         id: get_version
         run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+        run: echo "::set-output name=VERSION::$(node -p "require('./package.json').version")"
 
       - name: Get Commit Hash
         id: get_commit
@@ -68,8 +70,8 @@ jobs:
           path: dist/*.dmg
 
   build-windows:
-    runs-on: windows-latest
     needs: create-release
+    runs-on: windows-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -95,8 +97,10 @@ jobs:
           path: dist/*.exe
 
   upload-release-assets:
-    needs: [build-macos, build-windows]
+    needs: [build-macos, build-windows, create-release]
     runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ needs.create-release.outputs.version }}
     steps:
       - name: Download macOS Artifacts
         uses: actions/download-artifact@main
