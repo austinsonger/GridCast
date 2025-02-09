@@ -1,8 +1,9 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const path = require("path");
 const MPV = require("node-mpv");
 const ffmpeg = require("fluent-ffmpeg");
 const ffmpegPath = require("ffmpeg-static");
+const { setRepeatMode, getRepeatMode } = require('./storage');
 
 let mainWindow;
 const mpvPlayer = new MPV();
@@ -29,14 +30,6 @@ app.on("ready", () => {
 
 // IPC Handlers
 ipcMain.handle("play-mkv", async (event, filePath) => {
-    try {
-        await mpvPlayer.load(filePath);
-        await mpvPlayer.play();
-        console.log(`Playing MKV file: ${filePath}`);
-    } catch (error) {
-        console.error("Error playing MKV file:", error);
-        throw new Error("Unable to play MKV file.");
-    }
 });
 
 ipcMain.handle("get-file-path", async () => {
@@ -53,19 +46,10 @@ ipcMain.handle("get-file-path", async () => {
 });
 
 ipcMain.handle("convert-mkv-to-mp4", async (event, inputFilePath) => {
-    const outputFilePath = path.join(path.dirname(inputFilePath), "output.mp4");
+});
 
-    return new Promise((resolve, reject) => {
-        ffmpeg(inputFilePath)
-            .output(outputFilePath)
-            .on("end", () => {
-                console.log(`Converted file saved at: ${outputFilePath}`);
-                resolve(outputFilePath);
-            })
-            .on("error", (err) => {
-                console.error("FFmpeg error:", err);
-                reject(err);
-            })
-            .run();
-    });
+ipcMain.on('save-repeat-mode', (event, videoId, isRepeating) => {
+});
+
+ipcMain.handle('get-repeat-mode', (event, videoId) => {
 });
