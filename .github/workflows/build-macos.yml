@@ -30,7 +30,9 @@ jobs:
         run: npm install
 
       - name: Set GRIDCAST_TOKEN for Electron Builder
-        run: echo "GH_TOKEN=${{ secrets.GRIDCAST_TOKEN }}" >> $GITHUB_ENV
+        run: |
+          echo "GH_TOKEN=${{ secrets.GRIDCAST_TOKEN }}" >> $GITHUB_ENV
+          echo "GRIDCAST_TOKEN=${{ secrets.GRIDCAST_TOKEN }}" >> $GITHUB_ENV
 
       - name: Get the current commit hash
         id: get_commit
