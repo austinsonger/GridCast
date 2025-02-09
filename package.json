@@ -2,46 +2,47 @@
   "name": "gridcast",
   "version": "1.0.0",
   "main": "main.js",
-  "scripts": {
-    "start": "electron .",
-    "build:packager": "NODE_ENV=production electron-packager . GridCast --platform=darwin --arch=arm64,x64 --out=dist --overwrite",
-    "build:builder": "NODE_ENV=production electron-builder",
-    "build:macos": "npm run build:builder"
+"scripts": {
+  "start": "electron .",
+  "build:packager": "NODE_ENV=production electron-packager . GridCast --platform=darwin,win32 --arch=arm64,x64 --out=dist --overwrite",
+  "build:builder": "NODE_ENV=production electron-builder",
+  "build:macos": "npm run build:builder",
+  "build:windows": "npm run build:builder"
+},
+"build": {
+  "appId": "com.ol1vebranch.gridcast",
+  "productName": "GridCast",
+  "mac": {
+    "category": "public.app-category.video",
+    "target": [
+      {
+        "target": "dmg",
+        "arch": "arm64"
+      },
+      {
+        "target": "dmg",
+        "arch": "x64"
+      },
+      "zip"
+    ]
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "Gridcast for macOS",
-  "devDependencies": {
-    "electron": "^34.0.2",
-    "electron-builder": "^25.1.8",
-    "electron-packager": "^17.1.2"
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": "x64"
+      },
+      {
+        "target": "nsis",
+        "arch": "arm64"
+      },
+      "zip"
+    ]
   },
-  "dependencies": {
-    "electron-store": "^8.2.0",
-    "ffmpeg-static": "^5.2.0",
-    "fluent-ffmpeg": "^2.1.3",
-    "node-mpv": "^1.5.0"
-  },
-  "build": {
-    "appId": "com.ol1vebranch.gridcast",
-    "productName": "GridCast",
-    "mac": {
-      "category": "public.app-category.video",
-      "target": [
-        {
-          "target": "dmg",
-          "arch": "arm64"
-        },
-        {
-          "target": "dmg",
-          "arch": "x64"
-        },
-        "zip"
-      ]
-    },
-    "dmg": {
-      "format": "UDZO"
-    }
+  "nsis": {
+    "oneClick": false,
+    "perMachine": true,
+    "allowToChangeInstallationDirectory": true
   }
+}
 }
