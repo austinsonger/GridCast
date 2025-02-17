@@ -120,5 +120,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 modal.style.display = "none";
             }
         });
+
+        // Clear the stream URL input
+        document.getElementById("streamUrl").value = "";
+
+        // Clear the video file input by replacing the element
+        const fileInput = document.getElementById("videoFile");
+        const newFileInput = document.createElement("input");
+        newFileInput.type = "file";
+        newFileInput.id = "videoFile";
+        newFileInput.accept = "video/*";
+        fileInput.parentNode.replaceChild(newFileInput, fileInput);
+
+
     };
 });
