@@ -66,9 +66,45 @@ module.exports = {
     
     addToPlaylist: function() {
         try {
-            // Similar implementation for playlist functionality
-            console.log("Adding to playlist...");
+            const modal = document.getElementById("addToPlaylistModal");
+            if (!modal) {
+                console.error("Modal with id 'addToPlaylistModal' not found.");
+                return;
+            }
+    
+            const videoId = modal.dataset.videoId;
+            const urlInput = document.getElementById("addPlaylistUrl");
+            const fileInput = document.getElementById("addVideoFile");
+            const playlist = document.getElementById(`playlist-${videoId}`);
+    
+            if (!videoId) {
+                console.error("No videoId found in modal dataset.");
+                return;
+            }
+    
+            let listItem = document.createElement("div");
+            listItem.className = "playlist-item";
+    
+            let source = null;
+            if (urlInput && urlInput.value) {
+                source = urlInput.value;
+                listItem.textContent = urlInput.value;
+            } else if (fileInput && fileInput.files.length > 0) {
+                source = URL.createObjectURL(fileInput.files[0]);
+                listItem.textContent = fileInput.files[0].name;
+            } else {
+                console.warn("No stream URL or file selected for playlist.");
+                return;
+            }
+    
+            listItem.dataset.src = source;
+            listItem.onclick = function() {
+                document.getElementById(videoId).src = this.dataset.src;
+            };
+    
+            playlist.appendChild(listItem);
             this.closeModal();
+            console.log("Added to playlist...");
         } catch (error) {
             console.error("Error adding to playlist:", error);
         }
