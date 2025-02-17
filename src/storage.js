@@ -12,7 +12,19 @@ function getRepeatMode(videoId) {
     return store.get(`repeatMode.${videoId}`, false); // Default to false if not set
 }
 
+function saveLastPlayed(videoId, url) {
+    let lastPlayed = store.get('lastPlayed') || {};
+    lastPlayed[videoId] = url;
+    store.set('lastPlayed', lastPlayed);
+}
+
+function getLastPlayed() {
+    return store.get('lastPlayed') || {};
+}
+
 module.exports = {
     setRepeatMode,
-    getRepeatMode
+    getRepeatMode,
+    saveLastPlayed,
+    getLastPlayed
 };
