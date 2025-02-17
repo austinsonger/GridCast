@@ -13,7 +13,14 @@ document.addEventListener("DOMContentLoaded", () => {
         modal.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)";
         modal.style.borderRadius = "8px";
         modal.style.backgroundColor = "#fff";
-        window.targetVideoId = videoId; // Save video ID for reference
+        modal.dataset.videoId = videoId; // Store video ID in modal
+        console.log("Modal opened for videoId:", videoId); // Debugging
+        
+        // Check for saved URL/file
+        const savedSource = localStorage.getItem(`videoSource-${videoId}`);
+        if (savedSource) {
+            document.getElementById("streamUrl").value = savedSource;
+        }
     };
 
     // Toggle Repeat Mode
@@ -40,10 +47,9 @@ document.addEventListener("DOMContentLoaded", () => {
         loadStreamOrFile: function () {
             const url = document.getElementById("streamUrl").value;
             const fileInput = document.getElementById("videoFile");
-            const video = document.getElementById(window.targetVideoId);
-
-            console.log("URL:", url); // Debugging
-            console.log("Video Element:", video); // Debugging
+            const modal = document.getElementById("urlModal");
+            const videoId = modal.dataset.videoId;
+            const video = document.getElementById(videoId);
 
             if (url) {
                 if (Hls.isSupported()) {
@@ -117,6 +123,19 @@ document.addEventListener("DOMContentLoaded", () => {
         const modals = document.querySelectorAll(".modal");
         modals.forEach(modal => {
             if (event.target === modal) {
+                const videoId = modal.dataset.videoId; // Get video ID from modal
+                const video = document.getElementById(videoId);
+
+                console.log("Closing modal for videoId:", videoId); // Debugging
+
+                // Save the video source before closing
+                if (video && video.src) {
+                    console.log("Saving video source:", video.src); // Debugging
+                    localStorage.setItem(`videoSource-${videoId}`, video.src);
+                } else {
+                    console.log("Video or video source is not available."); // Debugging
+                }
+
                 modal.style.display = "none";
             }
         });
