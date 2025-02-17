@@ -9,6 +9,8 @@ contextBridge.exposeInMainWorld('api', {
     openFilePicker: () => ipcRenderer.invoke('get-file-path'),
     getRepeatMode: (videoId) => ipcRenderer.invoke('get-repeat-mode', videoId),
     saveRepeatMode: (videoId, isRepeating) => ipcRenderer.send('save-repeat-mode', videoId, isRepeating),
+    saveLastPlayed: (videoId, url) => ipcRenderer.send('save-last-played', videoId, url),
+    getLastPlayed: () => ipcRenderer.invoke('get-last-played'),
     
     // Modal functions
     openLoadStreamModal: modalFunctions.openLoadStreamModal,

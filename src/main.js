@@ -5,7 +5,7 @@ const path = require("path");
 // const mpvPlayer = new MPV();
 const ffmpeg = require("fluent-ffmpeg");
 const ffmpegPath = require("ffmpeg-static");
-const { setRepeatMode, getRepeatMode } = require('./storage');
+const { setRepeatMode, getRepeatMode, saveLastPlayed, getLastPlayed } = require('./storage');
 
 let mainWindow;
 
@@ -53,4 +53,12 @@ ipcMain.on('save-repeat-mode', (event, videoId, isRepeating) => {
 });
 
 ipcMain.handle('get-repeat-mode', (event, videoId) => {
+});
+
+ipcMain.on('save-last-played', (event, videoId, url) => {
+    saveLastPlayed(videoId, url);
+});
+
+ipcMain.handle('get-last-played', (event) => {
+    return getLastPlayed();
 });

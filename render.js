@@ -51,7 +51,10 @@ document.addEventListener("DOMContentLoaded", () => {
             const videoId = modal.dataset.videoId;
             const video = document.getElementById(videoId);
 
+            let source = null;
+
             if (url) {
+                source = url;
                 if (Hls.isSupported()) {
                     console.log("HLS is supported"); // Debugging
                     const hls = new Hls();
@@ -74,9 +77,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             } else if (fileInput.files.length > 0) {
                 const file = fileInput.files[0];
-                const objectUrl = URL.createObjectURL(file);
-                video.src = objectUrl;
+                source = URL.createObjectURL(file);
+                video.src = source;
                 video.load();
+            }
+
+            if (source) {
+                window.api.saveLastPlayed(videoId, source);
             }
 
             this.closeModal();
@@ -153,4 +160,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     };
+
+    // Load last played videos on startup
+    window.api.getLastPlayed().then(lastPlayed => {
+        for (const videoId in lastPlayed) {
+            const video = document.getElementById(videoId);
+            if (video) {
+                video.src = lastPlayed[videoId];
+            }
+        }
+    });
 });
