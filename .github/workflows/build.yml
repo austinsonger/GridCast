@@ -125,8 +125,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: dist/GridCast-${{ env.VERSION }}.dmg
-          asset_name: GridCast-${{ env.VERSION }}.dmg
+          asset_path: dist/GridCast-${{ env.VERSION }}-x64.dmg
+          asset_name: GridCast-${{ env.VERSION }}-x64.dmg
           asset_content_type: application/octet-stream
 
       - name: Upload macOS ARM64 Asset
