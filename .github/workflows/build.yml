@@ -129,6 +129,16 @@ jobs:
           asset_name: GridCast-${{ env.VERSION }}.dmg
           asset_content_type: application/octet-stream
 
+      - name: Upload macOS ARM64 Asset
+        uses: actions/upload-release-asset@v1
+        env:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+         upload_url: ${{ needs.create-release.outputs.upload_url }}
+         asset_path: dist/GridCast-${{ env.VERSION }}-arm64.dmg
+         asset_name: GridCast-${{ env.VERSION }}-arm64.dmg
+         asset_content_type: application/octet-stream
+         
       - name: Upload Windows Assets
         uses: actions/upload-release-asset@v1
         env:
