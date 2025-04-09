@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="css/styles.css"> 
 </head>
 <body>
+    <div class="global-controls">
+        <button onclick="window.toggleTheme()" class="theme-toggle">Toggle Theme</button>
+        <input type="color" id="bgColorPicker" onchange="window.changeBackground(this.value)" value="#000000">
+    </div>
 
     <!-- Video Players (2x2 Grid) -->
     <div id="player1" class="player">
@@ -16,7 +20,10 @@
             <button class="load-stream" onclick="window.openLoadStreamModal('video1')">Load Stream</button>
             <button class="repeat-toggle" id="repeat-video1" onclick="window.toggleRepeatMode('video1')">Repeat: Off</button>
             <button class="remove-video" onclick="window.removeVideo('video1')">Remove Video</button>
+            <button class="fullscreen-toggle" onclick="window.toggleFullscreen('video1')">Fullscreen</button>
+            <button class="edit-panel" onclick="window.editPanel('video1')">Edit Panel</button>
         </div>
+        <div class="panel-title" id="title-video1">Panel 1</div>
         <button class="add-to-playlist" data-video-id="video1" data-action="addToPlaylist">Add to Playlist</button>
         <div id="playlist-video1" class="playlist"></div>
     </div>

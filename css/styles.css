@@ -1,4 +1,11 @@
 /* Main layout */
+:root {
+    --bg-color: #000000;
+    --text-color: #ffffff;
+    --control-bg: rgba(255, 255, 255, 0.8);
+    --control-text: #000000;
+}
+
 body {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -9,7 +16,15 @@ body {
     height: 100vh;
     width: 100vw;
     overflow: hidden;
-    background-color: black;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+body.light-theme {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --control-bg: rgba(0, 0, 0, 0.8);
+    --control-text: #ffffff;
 }
 
 /* Video player container */
@@ -224,4 +239,33 @@ body {
 .modal button {
     margin: 5px;
     padding: 5px 10px;
+}
+
+.global-controls {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    display: flex;
+    gap: 10px;
+}
+
+.theme-toggle, .fullscreen-toggle, .edit-panel {
+    background: var(--control-bg);
+    color: var(--control-text);
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.panel-title {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: var(--text-color);
+    background: var(--control-bg);
+    padding: 5px 10px;
+    border-radius: 4px;
+    z-index: 10;
 }

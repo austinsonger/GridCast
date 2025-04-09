@@ -1,4 +1,54 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Theme and customization functions
+    window.toggleTheme = function() {
+        document.body.classList.toggle('light-theme');
+        localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+    };
+
+    window.changeBackground = function(color) {
+        document.documentElement.style.setProperty('--bg-color', color);
+        localStorage.setItem('bgColor', color);
+    };
+
+    window.toggleFullscreen = function(videoId) {
+        const player = document.getElementById(videoId).parentElement;
+        if (!document.fullscreenElement) {
+            player.requestFullscreen();
+        } else {
+            document.exitFullscreen();
+        }
+    };
+
+    window.editPanel = function(videoId) {
+        const titleEl = document.getElementById(`title-${videoId}`);
+        const newTitle = prompt('Enter panel title:', titleEl.textContent);
+        if (newTitle !== null) {
+            titleEl.textContent = newTitle;
+            localStorage.setItem(`title-${videoId}`, newTitle);
+        }
+    };
+
+    // Load saved preferences
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+    }
+
+    const savedBgColor = localStorage.getItem('bgColor');
+    if (savedBgColor) {
+        document.documentElement.style.setProperty('--bg-color', savedBgColor);
+        document.getElementById('bgColorPicker').value = savedBgColor;
+    }
+
+    // Load saved panel titles
+    document.querySelectorAll('.panel-title').forEach(title => {
+        const videoId = title.id.replace('title-', '');
+        const savedTitle = localStorage.getItem(`title-${videoId}`);
+        if (savedTitle) {
+            title.textContent = savedTitle;
+        }
+    });
+
     // Initialize drag-and-drop functionality
     const players = document.querySelectorAll('.player');
     players.forEach(player => {
