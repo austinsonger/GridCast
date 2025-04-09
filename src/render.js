@@ -1,4 +1,82 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Initialize drag-and-drop functionality
+    const players = document.querySelectorAll('.player');
+    players.forEach(player => {
+        player.setAttribute('draggable', true);
+        
+        player.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/plain', player.id);
+            player.classList.add('dragging');
+        });
+        
+        player.addEventListener('dragend', () => {
+            player.classList.remove('dragging');
+        });
+        
+        player.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+        
+        player.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const draggedId = e.dataTransfer.getData('text/plain');
+            const draggedElement = document.getElementById(draggedId);
+            const dropZone = player;
+            
+            if (draggedElement && dropZone !== draggedElement) {
+                const draggedRect = draggedElement.getBoundingClientRect();
+                const dropRect = dropZone.getBoundingClientRect();
+                
+                const draggedClone = draggedElement.cloneNode(true);
+                const dropClone = dropZone.cloneNode(true);
+                
+                draggedElement.replaceWith(dropClone);
+                dropZone.replaceWith(draggedClone);
+                
+                // Reinitialize event listeners for the cloned elements
+                initializePlayer(draggedClone);
+                initializePlayer(dropClone);
+            }
+        });
+    });
+    
+    function initializePlayer(player) {
+        player.setAttribute('draggable', true);
+        
+        player.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/plain', player.id);
+            player.classList.add('dragging');
+        });
+        
+        player.addEventListener('dragend', () => {
+            player.classList.remove('dragging');
+        });
+        
+        player.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+        
+        player.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const draggedId = e.dataTransfer.getData('text/plain');
+            const draggedElement = document.getElementById(draggedId);
+            const dropZone = player;
+            
+            if (draggedElement && dropZone !== draggedElement) {
+                const draggedRect = draggedElement.getBoundingClientRect();
+                const dropRect = dropZone.getBoundingClientRect();
+                
+                const draggedClone = draggedElement.cloneNode(true);
+                const dropClone = dropZone.cloneNode(true);
+                
+                draggedElement.replaceWith(dropClone);
+                dropZone.replaceWith(draggedClone);
+                
+                initializePlayer(draggedClone);
+                initializePlayer(dropClone);
+            }
+        });
+    }
     // Open Load Stream Modal
     window.openLoadStreamModal = function (videoId) {
         try {

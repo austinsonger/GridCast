@@ -21,6 +21,9 @@ body {
     justify-content: center;
     background-color: black;
     overflow: hidden;
+    resize: both;
+    min-width: 200px;
+    min-height: 150px;
 }
 
 .player video {
@@ -28,6 +31,26 @@ body {
     height: 100%;
     object-fit: cover;
     background-color: black;
+}
+
+.player.dragging {
+    opacity: 0.5;
+    cursor: move;
+}
+
+.player:hover {
+    cursor: move;
+}
+
+.player::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 15px;
+    height: 15px;
+    cursor: se-resize;
+    background: linear-gradient(135deg, transparent 50%, rgba(255, 255, 255, 0.5) 50%);
 }
 
 /* Button visibility logic */
