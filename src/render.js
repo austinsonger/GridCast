@@ -1,9 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Theme and customization functions
-    window.toggleTheme = function() {
-        document.body.classList.toggle('light-theme');
-        localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+    const bodyElement = document.body;
+    const debounce = (fn, delay) => {
+        let timeoutId;
+        return (...args) => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => fn.apply(this, args), delay);
+        };
     };
+
+    window.toggleTheme = debounce(function() {
+        bodyElement.classList.toggle('light-theme');
+        localStorage.setItem('theme', bodyElement.classList.contains('light-theme') ? 'light' : 'dark');
+    }, 250);
 
     window.changeBackground = function(color) {
         document.documentElement.style.setProperty('--bg-color', color);
@@ -53,75 +62,75 @@ document.addEventListener("DOMContentLoaded", () => {
     const players = document.querySelectorAll('.player');
     players.forEach(player => {
         player.setAttribute('draggable', true);
-        
+
         player.addEventListener('dragstart', (e) => {
             e.dataTransfer.setData('text/plain', player.id);
             player.classList.add('dragging');
         });
-        
+
         player.addEventListener('dragend', () => {
             player.classList.remove('dragging');
         });
-        
+
         player.addEventListener('dragover', (e) => {
             e.preventDefault();
         });
-        
+
         player.addEventListener('drop', (e) => {
             e.preventDefault();
             const draggedId = e.dataTransfer.getData('text/plain');
             const draggedElement = document.getElementById(draggedId);
             const dropZone = player;
-            
+
             if (draggedElement && dropZone !== draggedElement) {
                 const draggedRect = draggedElement.getBoundingClientRect();
                 const dropRect = dropZone.getBoundingClientRect();
-                
+
                 const draggedClone = draggedElement.cloneNode(true);
                 const dropClone = dropZone.cloneNode(true);
-                
+
                 draggedElement.replaceWith(dropClone);
                 dropZone.replaceWith(draggedClone);
-                
+
                 // Reinitialize event listeners for the cloned elements
                 initializePlayer(draggedClone);
                 initializePlayer(dropClone);
             }
         });
     });
-    
+
     function initializePlayer(player) {
         player.setAttribute('draggable', true);
-        
+
         player.addEventListener('dragstart', (e) => {
             e.dataTransfer.setData('text/plain', player.id);
             player.classList.add('dragging');
         });
-        
+
         player.addEventListener('dragend', () => {
             player.classList.remove('dragging');
         });
-        
+
         player.addEventListener('dragover', (e) => {
             e.preventDefault();
         });
-        
+
         player.addEventListener('drop', (e) => {
             e.preventDefault();
             const draggedId = e.dataTransfer.getData('text/plain');
             const draggedElement = document.getElementById(draggedId);
             const dropZone = player;
-            
+
             if (draggedElement && dropZone !== draggedElement) {
                 const draggedRect = draggedElement.getBoundingClientRect();
                 const dropRect = dropZone.getBoundingClientRect();
-                
+
                 const draggedClone = draggedElement.cloneNode(true);
                 const dropClone = dropZone.cloneNode(true);
-                
+
                 draggedElement.replaceWith(dropClone);
                 dropZone.replaceWith(draggedClone);
-                
+
                 initializePlayer(draggedClone);
                 initializePlayer(dropClone);
             }

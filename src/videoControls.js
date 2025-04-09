@@ -71,5 +71,17 @@ export async function toggleRepeatMode(videoId) {
         console.log(`Saved repeatMode for ${videoId}: ${repeatModes[videoId]}`);
     } catch (error) {
         console.error(`Error in toggleRepeatMode for ${videoId}:`, error);
+        // Reset to known good state
+        repeatModes[videoId] = false;
+        const repeatButton = document.querySelector(`#player${videoId.slice(-1)} .repeat-toggle`);
+        if (repeatButton) {
+            repeatButton.classList.remove('active');
+            repeatButton.textContent = 'Repeat: Off';
+        }
+        // Notify user
+        const event = new CustomEvent('video-error', { 
+            detail: { message: 'Failed to toggle repeat mode. Please try again.' }
+        });
+        window.dispatchEvent(event);
     }
 }
