@@ -7,7 +7,8 @@
     "build:packager": "NODE_ENV=production electron-packager . GridCast --platform=darwin,win32 --arch=arm64,x64 --out=dist --overwrite",
     "build:builder": "cross-env NODE_ENV=production electron-builder",
     "build:macos": "npm run build:builder",
-    "build:windows": "npm run build:builder"
+    "build:windows": "npm run build:builder",
+    "build:linux": "npm run build:builder -- --linux AppImage"
   },
   "keywords": [
     "player",
@@ -66,6 +67,17 @@
           "arch": "arm64"
         },
         "zip"
+      ]
+    },
+    "linux": {
+      "artifactName": "${productName}-${version}-x86_64.${ext}",
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
       ]
     },
     "nsis": {

@@ -2,7 +2,7 @@
 
 # GridCast
 
-GridCast is a **macOS Electron application** that allows users to play multiple M3U8 streams and MP4 files in a **dynamic 2x2 grid layout**. Built with **Electron.js**, **MPV**, and **HLS.js**, it provides a seamless way to load, manage, and persist playlists for multiple video streams.
+GridCast is an **Electron application** that allows users to play multiple M3U8 streams and MP4 files in a **dynamic 2x2 grid layout**. Built with **Electron.js**, **MPV**, and **HLS.js**, it provides a seamless way to load, manage, and persist playlists for multiple video streams.
 
 
 ### After the application opens up
@@ -40,8 +40,16 @@ GridCast is a **macOS Electron application** that allows users to play multiple 
 
 ### **Download the App**
 1. Navigate to the **Releases** section on GitHub.
-2. Download the latest **`GridCast.dmg`** for your macOS architecture (**x64** or **arm64**).
-3. Open the `.dmg` file and drag `GridCast` into your **Applications** folder.
+2. Download the latest release artifact for your platform:
+   - macOS: **`GridCast-<version>-x64.dmg`** or **`GridCast-<version>-arm64.dmg`**
+   - Linux: **`GridCast-<version>-x86_64.AppImage`**
+3. macOS: Open the `.dmg` file and drag `GridCast` into your **Applications** folder.
+4. Linux: Make the AppImage executable and run it:
+
+```sh
+chmod +x GridCast-<version>-x86_64.AppImage
+./GridCast-<version>-x86_64.AppImage
+```
 
 ---
 
@@ -112,5 +120,3 @@ npm run build:macos
 
 - 💻 Created by Austin Songer
 - 📧 Contact: austin@songer.me
-
-

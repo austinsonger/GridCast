@@ -66,7 +66,7 @@ jobs:
         run: npm run build:macos
 
       - name: Upload macOS Artifacts
-        uses: actions/upload-artifact@main
+        uses: actions/upload-artifact@v4
         with:
           name: macos-build
           path: dist/*.dmg
@@ -93,27 +93,60 @@ jobs:
         run: npm run build:windows
 
       - name: Upload Windows Artifacts
-        uses: actions/upload-artifact@main
+        uses: actions/upload-artifact@v4
         with:
           name: windows-build
           path: dist/*.exe
 
+  build-linux:
+    needs: create-release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Linux AppImage
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run build:linux
+
+      - name: Upload Linux Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-build
+          path: dist/*.AppImage
+
   upload-release-assets:
-    needs: [build-macos, build-windows, create-release]
+    needs: [build-macos, build-windows, build-linux, create-release]
     runs-on: ubuntu-latest
     env:
       VERSION: ${{ needs.create-release.outputs.version }}
     steps:
       - name: Download macOS Artifacts
-        uses: actions/download-artifact@main
+        uses: actions/download-artifact@v4
         with:
           name: macos-build
           path: dist
 
       - name: Download Windows Artifacts
-        uses: actions/download-artifact@main
+        uses: actions/download-artifact@v4
         with:
           name: windows-build
+          path: dist
+
+      - name: Download Linux Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-build
           path: dist
 
       - name: List macOS Directory Contents
@@ -147,4 +180,14 @@ jobs:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_path: dist/GridCast Setup ${{ env.VERSION }}.exe
           asset_name: GridCast-${{ env.VERSION }}.exe
+          asset_content_type: application/octet-stream
+
+      - name: Upload Linux AppImage Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: dist/GridCast-${{ env.VERSION }}-x86_64.AppImage
+          asset_name: GridCast-${{ env.VERSION }}-x86_64.AppImage
           asset_content_type: application/octet-stream
